@@ -12,7 +12,7 @@ class ASoC:
         self.token = ""
     
     def login(self):
-        resp = requests.post("https://cloud.appscan.com/api/V2/Account/ApiKeyLogin", json=self.apikey)
+        resp = requests.post("https://cloud.appscan.com/api/V2/Account/ApiKeyLogin", json=self.apikey, timeout=60)
         if(resp.status_code == 200):
             jsonObj = resp.json()
             self.token = jsonObj["Token"]
@@ -25,7 +25,7 @@ class ASoC:
             "Accept": "application/json",
             "Authorization": "Bearer "+self.token
         }
-        resp = requests.get("https://cloud.appscan.com/api/V2/Account/Logout", headers=headers)
+        resp = requests.get("https://cloud.appscan.com/api/V2/Account/Logout", headers=headers, timeout=60)
         if(resp.status_code == 200):
             self.token = ""
             return True
@@ -37,7 +37,7 @@ class ASoC:
             "Accept": "application/json",
             "Authorization": "Bearer "+self.token
         }
-        resp = requests.get("https://cloud.appscan.com/api/V2/Account/TenantInfo", headers=headers)
+        resp = requests.get("https://cloud.appscan.com/api/V2/Account/TenantInfo", headers=headers, timeout=60)
         return resp.status_code == 200
     
     def generateIRX(self, scanName, appscanBin, stdoutFilePath = "", configFile=None, printio=True):
@@ -73,7 +73,7 @@ class ASoC:
             "Accept": "application/json",
             "Authorization": "Bearer "+self.token
         }
-        resp = requests.post("https://cloud.appscan.com/api/V2/FileUpload", headers=headers, files=files)
+        resp = requests.post("https://cloud.appscan.com/api/V2/FileUpload", headers=headers, files=files, timeout=60)
         if(resp.status_code == 201):
             fileId = resp.json()["FileId"]
             return fileId
@@ -90,7 +90,7 @@ class ASoC:
             "Accept": "application/json",
             "Authorization": "Bearer "+self.token
         }
-        resp = requests.post("https://cloud.appscan.com/api/v2/Scans/StaticAnalyzer", headers=headers, data=data)
+        resp = requests.post("https://cloud.appscan.com/api/v2/Scans/StaticAnalyzer", headers=headers, data=data, timeout=60)
         if(resp.status_code == 201):
             scanId = resp.json()["Id"]
             return scanId
@@ -101,7 +101,7 @@ class ASoC:
             "Accept": "application/json",
             "Authorization": "Bearer "+self.token
         }
-        resp = requests.get("https://cloud.appscan.com/api/v2/Scans/"+scanId, headers=headers)
+        resp = requests.get("https://cloud.appscan.com/api/v2/Scans/"+scanId, headers=headers, timeout=60)
         if(resp.status_code == 200):
             return resp.json()["LatestExecution"]["Status"]
         else:
@@ -115,7 +115,7 @@ class ASoC:
             "Authorization": "Bearer "+self.token
         }
         
-        resp = requests.get("https://cloud.appscan.com/api/V2/Apps/"+id, headers=headers)
+        resp = requests.get("https://cloud.appscan.com/api/V2/Apps/"+id, headers=headers, timeout=60)
         
         if(resp.status_code == 200):
             return resp.json()
@@ -134,7 +134,7 @@ class ASoC:
             "Authorization": "Bearer "+self.token
         }
         
-        resp = requests.get(asoc_url+id, headers=headers)
+        resp = requests.get(asoc_url+id, headers=headers, timeout=60)
         
         if(resp.status_code == 200):
             return resp.json()
@@ -149,7 +149,7 @@ class ASoC:
             "Accept": "application/json",
             "Authorization": "Bearer "+self.token
         }
-        resp = requests.post(url, headers=headers, json=reportConfig)
+        resp = requests.post(url, headers=headers, json=reportConfig, timeout=60)
         if(resp.status_code == 200):
             return resp.json()["Id"]
         else:
@@ -160,7 +160,7 @@ class ASoC:
             "Accept": "application/json",
             "Authorization": "Bearer "+self.token
         }
-        resp = requests.get("https://cloud.appscan.com/api/V2/Reports/"+reportId, headers=headers)
+        resp = requests.get("https://cloud.appscan.com/api/V2/Reports/"+reportId, headers=headers, timeout=60)
         if(resp.status_code == 200):
             return resp.json()
         else:
@@ -180,7 +180,7 @@ class ASoC:
             "Accept": "application/json",
             "Authorization": "Bearer "+self.token
         }
-        resp = requests.get("https://cloud.appscan.com/api/v2/Reports/Download/"+reportId, headers=headers)
+        resp = requests.get("https://cloud.appscan.com/api/v2/Reports/Download/"+reportId, headers=headers, timeout=60)
         if(resp.status_code==200):
             report_bytes = resp.content
             with open(fullPath, "wb") as f:

@@ -179,7 +179,7 @@ class AppScanOnCloudSAST(Pipe):
         #Downloading SAClientUtil
         url = "https://cloud.appscan.com/api/SCX/StaticAnalyzer/SAClientUtil?os=linux"
         logger.info("Downloading SAClientUtil Zip")
-        r = requests.get(url, stream=True)
+        r = requests.get(url, stream=True, timeout=60)
         if(r.status_code != 200):
             logger.error("Invalid HTTP code downloading SAClient Util")
             return False
