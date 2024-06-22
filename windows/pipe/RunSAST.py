@@ -1,6 +1,5 @@
 from bitbucket_pipes_toolkit import Pipe, get_logger
 from ASoC import ASoC
-import requests
 import os
 import json
 import time
@@ -8,6 +7,7 @@ import zipfile
 import re
 import datetime
 import shutil
+from security import safe_requests
 
 logger = get_logger()
 
@@ -179,7 +179,7 @@ class AppScanOnCloudSAST(Pipe):
         #Downloading SAClientUtil
         url = "https://cloud.appscan.com/api/SCX/StaticAnalyzer/SAClientUtil?os=linux"
         logger.info("Downloading SAClientUtil Zip")
-        r = requests.get(url, stream=True)
+        r = safe_requests.get(url, stream=True)
         if(r.status_code != 200):
             logger.error("Invalid HTTP code downloading SAClient Util")
             return False

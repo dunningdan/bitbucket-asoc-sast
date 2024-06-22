@@ -5,6 +5,7 @@ import datetime
 import io
 import sys
 import os
+from security import safe_requests
 
 class ASoC:
     def __init__(self, apikey):
@@ -101,7 +102,7 @@ class ASoC:
             "Accept": "application/json",
             "Authorization": "Bearer "+self.token
         }
-        resp = requests.get("https://cloud.appscan.com/api/v2/Scans/"+scanId, headers=headers)
+        resp = safe_requests.get("https://cloud.appscan.com/api/v2/Scans/"+scanId, headers=headers)
         if(resp.status_code == 200):
             return resp.json()["LatestExecution"]["Status"]
         else:
@@ -115,7 +116,7 @@ class ASoC:
             "Authorization": "Bearer "+self.token
         }
         
-        resp = requests.get("https://cloud.appscan.com/api/V2/Apps/"+id, headers=headers)
+        resp = safe_requests.get("https://cloud.appscan.com/api/V2/Apps/"+id, headers=headers)
         
         if(resp.status_code == 200):
             return resp.json()
@@ -134,7 +135,7 @@ class ASoC:
             "Authorization": "Bearer "+self.token
         }
         
-        resp = requests.get(asoc_url+id, headers=headers)
+        resp = safe_requests.get(asoc_url+id, headers=headers)
         
         if(resp.status_code == 200):
             return resp.json()
@@ -160,7 +161,7 @@ class ASoC:
             "Accept": "application/json",
             "Authorization": "Bearer "+self.token
         }
-        resp = requests.get("https://cloud.appscan.com/api/V2/Reports/"+reportId, headers=headers)
+        resp = safe_requests.get("https://cloud.appscan.com/api/V2/Reports/"+reportId, headers=headers)
         if(resp.status_code == 200):
             return resp.json()
         else:
@@ -180,7 +181,7 @@ class ASoC:
             "Accept": "application/json",
             "Authorization": "Bearer "+self.token
         }
-        resp = requests.get("https://cloud.appscan.com/api/v2/Reports/Download/"+reportId, headers=headers)
+        resp = safe_requests.get("https://cloud.appscan.com/api/v2/Reports/Download/"+reportId, headers=headers)
         if(resp.status_code==200):
             report_bytes = resp.content
             with open(fullPath, "wb") as f:

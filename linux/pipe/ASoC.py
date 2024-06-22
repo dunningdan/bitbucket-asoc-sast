@@ -5,6 +5,7 @@ import datetime
 import io
 import sys
 import os
+from security import safe_requests
 
 class ASoC:
     def __init__(self, apikey, datacenter="NA"):
@@ -29,7 +30,7 @@ class ASoC:
             "Accept": "application/json",
             "Authorization": "Bearer "+self.token
         }
-        resp = requests.get(f"{self.base_url}/api/V2/Account/Logout", headers=headers)
+        resp = safe_requests.get(f"{self.base_url}/api/V2/Account/Logout", headers=headers)
         if(resp.status_code == 200):
             self.token = ""
             return True
@@ -41,7 +42,7 @@ class ASoC:
             "Accept": "application/json",
             "Authorization": "Bearer "+self.token
         }
-        resp = requests.get(f"{self.base_url}/api/V2/Account/TenantInfo", headers=headers)
+        resp = safe_requests.get(f"{self.base_url}/api/V2/Account/TenantInfo", headers=headers)
         return resp.status_code == 200
     
     def generateIRX(self, scanName, appscanBin, stdoutFilePath = "", configFile=None, secret_scanning=False, printio=True):
@@ -109,7 +110,7 @@ class ASoC:
             "Accept": "application/json",
             "Authorization": "Bearer "+self.token
         }
-        resp = requests.get(f"{self.base_url}/api/v2/Scans/"+scanId, headers=headers)
+        resp = safe_requests.get(f"{self.base_url}/api/v2/Scans/"+scanId, headers=headers)
         if(resp.status_code == 200):
             return resp.json()["LatestExecution"]["Status"]
         else:
@@ -123,7 +124,7 @@ class ASoC:
             "Authorization": "Bearer "+self.token
         }
         
-        resp = requests.get(f"{self.base_url}/api/V2/Apps/"+id, headers=headers)
+        resp = safe_requests.get(f"{self.base_url}/api/V2/Apps/"+id, headers=headers)
         
         if(resp.status_code == 200):
             return resp.json()
@@ -142,7 +143,7 @@ class ASoC:
             "Authorization": "Bearer "+self.token
         }
         
-        resp = requests.get(asoc_url+id, headers=headers)
+        resp = safe_requests.get(asoc_url+id, headers=headers)
         
         if(resp.status_code == 200):
             return resp.json()
@@ -168,7 +169,7 @@ class ASoC:
             "Accept": "application/json",
             "Authorization": "Bearer "+self.token
         }
-        resp = requests.get(f"{self.base_url}/api/V2/Reports/"+reportId, headers=headers)
+        resp = safe_requests.get(f"{self.base_url}/api/V2/Reports/"+reportId, headers=headers)
         if(resp.status_code == 200):
             return resp.json()
         else:
@@ -188,7 +189,7 @@ class ASoC:
             "Accept": "application/json",
             "Authorization": "Bearer "+self.token
         }
-        resp = requests.get(f"{self.base_url}/api/v2/Reports/Download/"+reportId, headers=headers)
+        resp = safe_requests.get(f"{self.base_url}/api/v2/Reports/Download/"+reportId, headers=headers)
         if(resp.status_code==200):
             report_bytes = resp.content
             with open(fullPath, "wb") as f:
