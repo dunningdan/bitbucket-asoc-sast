@@ -5,6 +5,7 @@ import datetime
 import io
 import sys
 import os
+from security import safe_command
 
 class ASoC:
     def __init__(self, apikey):
@@ -45,9 +46,9 @@ class ASoC:
         
         with io.open(stdoutFile, 'wb') as writer, io.open(stdoutFile, 'rb') as reader:
             if(configFile):
-                process = subprocess.Popen([appscanBin, "prepare", "-c", configFile, "-n", scanName], stdout=writer)
+                process = safe_command.run(subprocess.Popen, [appscanBin, "prepare", "-c", configFile, "-n", scanName], stdout=writer)
             else:
-                process = subprocess.Popen([appscanBin, "prepare", "-n", scanName], stdout=writer)
+                process = safe_command.run(subprocess.Popen, [appscanBin, "prepare", "-n", scanName], stdout=writer)
             while process.poll() is None:
                 if(printio):
                     sys.stdout.write(reader.read().decode('ascii'))
